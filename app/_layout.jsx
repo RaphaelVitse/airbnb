@@ -1,19 +1,28 @@
 import { Stack, router } from "expo-router";
 import { useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const RootLayout = () => {
   const [userId, setUserId] = useState(null);
   const [userToken, setUserToken] = useState(null);
   console.log("usertoken", userToken);
 
-  const login = (id, token) => {
+  const userStorage = JSON.stringify({
+    userId: userId,
+    userToken: userToken,
+  });
+  console.log("user ====", userStorage);
+
+  const login = async (id, token) => {
     setUserId(id), setUserToken(token);
+    await AsyncStorage.setItem("userStorage", userStorage);
   };
 
-  const logout = () => {
+  const logout = async () => {
     setUserId(null);
     setUserToken(null);
+    await AsyncStorage.removeItem("user");
   };
 
   useEffect(() => {

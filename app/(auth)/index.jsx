@@ -3,6 +3,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import axios from "axios";
 import { Link } from "expo-router";
 
+// J'importe tous les exports de mes composants
 import {
   Logo,
   Title,
@@ -19,10 +20,11 @@ const LoginScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
-  console.log(email, password);
+  // console.log(email, password);
 
   const { login } = useContext(AuthContext); // je recupere les props mises dans le layout
 
+  ////// fonction gerant la connexion quand on appuie sur login
   const handleSubmit = async () => {
     // console.log("submited");
     setErrorMessage(null);
@@ -36,6 +38,7 @@ const LoginScreen = () => {
       );
       console.log(response.data);
       login(response.data.id, response.data.token);
+
       alert("login ok");
     } catch (error) {
       console.log(error);
