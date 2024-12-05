@@ -1,5 +1,7 @@
 import { View, Text, SafeAreaView } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import axios from "axios";
+import { Link } from "expo-router";
 
 import {
   Logo,
@@ -9,12 +11,17 @@ import {
   RedirectButton,
 } from "../../assets/components/index";
 
-import { useState } from "react";
+//je recupere le context et le Hook
+import { AuthContext } from "../../context/AuthContext";
+import { useState, useContext } from "react";
 
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
+  console.log(email, password);
+
+  const { login } = useContext(AuthContext); // je recupere les props mises dans le layout
 
   const handleSubmit = async () => {
     // console.log("submited");
@@ -27,6 +34,8 @@ const LoginScreen = () => {
           password: password,
         }
       );
+      console.log(response.data);
+      login(response.data.id, response.data.token);
       alert("login ok");
     } catch (error) {
       console.log(error);
@@ -57,8 +66,17 @@ const LoginScreen = () => {
           setState={setPassword}
           secure={true}
         />
+        {errorMessage && (
+          <View>
+            <Text>{errorMessage}</Text>
+          </View>
+        )}
         <CustomButton title="Sign In" pressFunc={handleSubmit} />
-        <RedirectButton title={"No account ? Register !"} screen={"/signup"} />
+        <RedirectButton
+          title={"No account ? Register !"}
+          screen={"(auth)/signup"}
+        />
+        <Link href="/home">Vers home</Link>
       </KeyboardAwareScrollView>
     </SafeAreaView>
   );
